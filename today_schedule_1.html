@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>今日のスケジュール</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;background:#f8f7f4;min-height:100vh;padding:0}
+.header{padding:20px 20px 12px;background:#fff;border-bottom:0.5px solid #d3d1c7}
+.date-line{font-size:12px;color:#888780;margin-bottom:4px}
+.day-title{font-size:22px;font-weight:500;color:#2c2c2a}
+.day-sub{font-size:13px;color:#888780;margin-top:2px}
+.blocks{padding:16px 20px;display:flex;flex-direction:column;gap:10px}
+.b{border-radius:10px;padding:14px 16px;font-size:15px;line-height:1.6;display:flex;flex-direction:column;gap:2px}
+.b-title{font-weight:500;font-size:16px}
+.b-time{font-size:13px;opacity:.75}
+.b-note{font-size:12px;opacity:.65;margin-top:2px}
+.walk{background:#E1F5EE;color:#085041}
+.free{background:#FAEEDA;color:#633806}
+.rec {background:#EEEDFE;color:#3C3489}
+.lib {background:#E6F1FB;color:#0C447C}
+.post{background:#EAF3DE;color:#27500A}
+.buf {background:#F1EFE8;color:#444441}
+.hw  {background:#FCEBEB;color:#791F1F}
+.cli {background:#FBEAF0;color:#72243E}
+.rest{background:#F1EFE8;color:#444441;text-align:center;padding:30px 16px}
+.rule-box{margin:0 20px 20px;background:#fff;border-radius:10px;border:0.5px solid #d3d1c7;padding:14px 16px;font-size:13px;color:#5f5e5a;line-height:1.7}
+.rule-box b{color:#2c2c2a;font-weight:500}
+.nav{display:flex;justify-content:center;gap:8px;padding:12px 20px 24px;flex-wrap:wrap}
+.nav button{background:#fff;border:0.5px solid #d3d1c7;border-radius:20px;padding:6px 14px;font-size:12px;color:#5f5e5a;cursor:pointer;font-family:inherit}
+.nav button.active{background:#2c2c2a;color:#fff;border-color:#2c2c2a}
+.nav button.today-btn{border-color:#534AB7;color:#3C3489}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="date-line" id="date-line"></div>
+  <div class="day-title" id="day-title"></div>
+  <div class="day-sub" id="day-sub"></div>
+</div>
+
+<div class="blocks" id="blocks"></div>
+<div class="rule-box" id="rule-box"></div>
+<div class="nav" id="nav"></div>
+
+<script>
+const WEEKDAYS = ["日","月","火","水","木","金","土"];
+
+const THEMES = {
+  月:{label:"月（緩やかスタート）",sub:"今日は午前をゆっくり使う日"},
+  火:{label:"火（収録日）",sub:"朝に収録、午後は図書館でnote編集"},
+  水:{label:"水（編集日）",sub:"動画編集と図書館でnoteを仕上げる"},
+  木:{label:"木（投稿日）",sub:"今日がnote投稿日！"},
+  金:{label:"金（軽め）",sub:"体力を温存しながら次週の準備"},
+  土:{label:"土（収録予備）",sub:"火に撮れた週は休憩でOK"},
+  日:{label:"日（完全オフ）",sub:"コンテンツに触れない日"}
+};
+
+const SCHEDULE = {
+  月:[
+    {cls:"walk",icon:"🐕",title:"朝散歩",time:"6:00〜7:30"},
+    {cls:"free",icon:"📖",title:"午前フリー",time:"8:00〜12:00",note:"読書・自分リーディング・カード"},
+    {cls:"lib", icon:"📚",title:"図書館　note下書き",time:"13:00〜18:00"},
+    {cls:"walk",icon:"🐕",title:"夕散歩",time:"18:00〜18:40"},
+  ],
+  火:[
+    {cls:"walk",icon:"🐕",title:"朝散歩",time:"6:00〜7:30"},
+    {cls:"rec", icon:"📹",title:"YouTube収録",time:"8:30〜10:30",note:"セッティング込み。定位置を崩さない"},
+    {cls:"free",icon:"🍱",title:"ランチ・休憩",time:"11:00〜12:30"},
+    {cls:"lib", icon:"📚",title:"図書館　note編集",time:"13:00〜18:00"},
+    {cls:"walk",icon:"🐕",title:"夕散歩",time:"18:00〜18:40"},
+    {cls:"hw",  icon:"📋",title:"※月1回 ハローワーク",time:"終日（認定日）",note:"この日は他の予定を入れない"},
+  ],
+  水:[
+    {cls:"walk",icon:"🐕",title:"朝散歩",time:"6:00〜7:30"},
+    {cls:"free",icon:"🎬",title:"動画編集・仕込み",time:"8:00〜12:00"},
+    {cls:"lib", icon:"📚",title:"図書館　note仕上げ",time:"13:00〜18:00"},
+    {cls:"walk",icon:"🐕",title:"夕散歩",time:"18:00〜18:40"},
+  ],
+  木:[
+    {cls:"walk",icon:"🐕",title:"朝散歩",time:"6:00〜7:30"},
+    {cls:"free",icon:"✍️",title:"午前フリー　最終確認",time:"8:00〜12:00"},
+    {cls:"lib", icon:"📚",title:"図書館　最終調整",time:"13:00〜15:00"},
+    {cls:"post",icon:"✅",title:"note 投稿！",time:"15:00〜16:00"},
+    {cls:"buf", icon:"🗂️",title:"次週の仕込み",time:"16:00〜18:00"},
+    {cls:"walk",icon:"🐕",title:"夕散歩",time:"18:00〜18:40"},
+  ],
+  金:[
+    {cls:"walk",icon:"🐕",title:"朝散歩",time:"6:00〜7:30"},
+    {cls:"free",icon:"📖",title:"読書・カード",time:"8:00〜11:00"},
+    {cls:"cli", icon:"🏥",title:"※月2回 心療内科",time:"11:00〜13:30（往復含む）"},
+    {cls:"lib", icon:"📚",title:"図書館　次週下書き",time:"13:00〜17:00"},
+    {cls:"walk",icon:"🐕",title:"夕散歩",time:"18:00〜18:40"},
+  ],
+  土:[
+    {cls:"walk",icon:"🐕",title:"朝散歩",time:"6:00〜7:30"},
+    {cls:"rec", icon:"📹",title:"収録（予備日）",time:"8:30〜10:30",note:"火に撮れた週は休憩でOK"},
+    {cls:"free",icon:"🍱",title:"ランチ・休憩",time:"11:00〜12:30"},
+    {cls:"buf", icon:"🃏",title:"自由時間　カード・読書",time:"13:00〜18:00"},
+    {cls:"walk",icon:"🐕",title:"夕散歩",time:"18:00〜18:40"},
+  ],
+  日:[
+    {cls:"walk",icon:"🐕",title:"朝散歩",time:"6:00〜7:30"},
+    {cls:"rest",icon:"",title:"完全休養",time:"",note:"コンテンツに触れない日\nゆっくり過ごす"},
+    {cls:"walk",icon:"🐕",title:"夕散歩",time:"18:00〜18:40"},
+  ]
+};
+
+const RULES = {
+  月:"今週のnoteテーマを決めて、思いつくまま書き出す日。完成度は気にしない。",
+  火:"収録は朝8:30スタートを守る。夜収録は原則なし。",
+  水:"動画は「編集できる状態」にするだけでOK。完璧にしなくていい。",
+  木:"投稿したら今週のコンテンツは完了。次週の仕込みは軽くでいい。",
+  金:"しんどければ図書館はスキップしてOK。心療内科がある週は特に無理しない。",
+  土:"火曜に収録できた週は今日は完全休養にしても構わない。",
+  日:"YouTubeもnoteも見なくていい日。無意識さんを休ませる。"
+};
+
+const today = new Date();
+const todayDayIndex = today.getDay();
+const todayDayName = WEEKDAYS[todayDayIndex];
+const weekdayOrder = ["月","火","水","木","金","土","日"];
+
+function getDateForDay(targetDayName) {
+  const targetIndex = WEEKDAYS.indexOf(targetDayName);
+  const diff = targetIndex - todayDayIndex;
+  const d = new Date(today);
+  d.setDate(today.getDate() + diff);
+  return d;
+}
+
+function formatDate(d, dayName) {
+  return `${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日（${dayName}曜日）`;
+}
+
+function render(dayName) {
+  const targetDate = getDateForDay(dayName);
+  const isToday = dayName === todayDayName;
+  const dateStr = formatDate(targetDate, dayName);
+
+  document.getElementById("date-line").textContent = isToday ? "今日　" + dateStr : dateStr;
+  document.getElementById("day-title").textContent = THEMES[dayName].label;
+  document.getElementById("day-sub").textContent = THEMES[dayName].sub;
+
+  const container = document.getElementById("blocks");
+  container.innerHTML = "";
+  SCHEDULE[dayName].forEach(b => {
+    const div = document.createElement("div");
+    div.className = "b " + b.cls;
+    let html = `<div class="b-title">${b.icon ? b.icon+" " : ""}${b.title}</div>`;
+    if(b.time) html += `<div class="b-time">${b.time}</div>`;
+    if(b.note) html += `<div class="b-note">${b.note.replace(/\n/,"<br>")}</div>`;
+    div.innerHTML = html;
+    container.appendChild(div);
+  });
+
+  document.getElementById("rule-box").innerHTML = `<b>今日のポイント</b><br>${RULES[dayName]}`;
+
+  document.querySelectorAll(".nav button").forEach(btn => {
+    btn.classList.toggle("active", btn.dataset.day === dayName);
+  });
+}
+
+const navEl = document.getElementById("nav");
+weekdayOrder.forEach(d => {
+  const btn = document.createElement("button");
+  btn.textContent = d === todayDayName ? d + "（今日）" : d;
+  btn.dataset.day = d;
+  if(d === todayDayName) btn.classList.add("today-btn");
+  btn.onclick = () => render(d);
+  navEl.appendChild(btn);
+});
+
+render(todayDayName);
+</script>
+</body>
+</html>
