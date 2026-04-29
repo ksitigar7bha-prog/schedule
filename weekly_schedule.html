@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>一週間スケジュール</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;background:#f8f7f4;padding:20px;font-size:13px}
+.sched{max-width:1100px;margin:0 auto}
+h1{font-size:16px;font-weight:500;color:#2c2c2a;margin-bottom:12px}
+.legend{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;align-items:center}
+.leg{display:flex;align-items:center;gap:5px;font-size:11px;color:#5f5e5a}
+.dot{width:10px;height:10px;border-radius:2px;flex-shrink:0}
+.grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px;margin-bottom:14px}
+.col{border-radius:8px;border:0.5px solid #d3d1c7;overflow:hidden;background:#fff}
+.dh{padding:6px 3px;text-align:center;font-weight:500;font-size:11px;border-bottom:0.5px solid #d3d1c7;line-height:1.3}
+.db{padding:5px 4px;display:flex;flex-direction:column;gap:4px}
+.b{border-radius:5px;padding:4px 5px;font-size:10.5px;line-height:1.45}
+.walk{background:#E1F5EE;color:#085041;border-left:2px solid #0F6E56}
+.free{background:#FAEEDA;color:#633806;border-left:2px solid #854F0B}
+.rec{background:#EEEDFE;color:#3C3489;border-left:2px solid #534AB7}
+.lib{background:#E6F1FB;color:#0C447C;border-left:2px solid #185FA5}
+.post{background:#EAF3DE;color:#27500A;border-left:2px solid #3B6D11}
+.buf{background:#F1EFE8;color:#444441;border-left:2px solid #888780}
+.hw{background:#FCEBEB;color:#791F1F;border-left:2px solid #A32D2D}
+.cli{background:#FBEAF0;color:#72243E;border-left:2px solid #993556}
+.rest{background:#F1EFE8;color:#444441;border-left:2px solid #888780}
+.sep{font-size:9px;color:#888780;margin:2px 0 1px;padding-top:2px;border-top:0.5px solid #d3d1c7}
+.sm{font-size:9.5px;opacity:.75}
+.dh.mon{background:#F1EFE8;color:#444441}
+.dh.tue{background:#EEEDFE;color:#3C3489}
+.dh.wed{background:#EEEDFE;color:#3C3489}
+.dh.thu{background:#FBEAF0;color:#72243E}
+.dh.fri{background:#E6F1FB;color:#0C447C}
+.dh.sat{background:#EEEDFE;color:#3C3489}
+.dh.sun{background:#EAF3DE;color:#27500A}
+.info{background:#f1efe8;border-radius:8px;border:0.5px solid #d3d1c7;padding:10px 14px;font-size:12px;color:#5f5e5a;line-height:1.7}
+.info b{color:#2c2c2a;font-weight:500}
+.tag{display:inline-block;font-size:10px;padding:1px 6px;border-radius:10px;margin-right:3px}
+.tag-yt{background:#EEEDFE;color:#3C3489}
+.tag-n{background:#EAF3DE;color:#27500A}
+</style>
+</head>
+<body>
+<div class="sched">
+<h1>週間コンテンツスケジュール</h1>
+<div class="legend">
+  <div class="leg"><div class="dot" style="background:#0F6E56"></div>散歩</div>
+  <div class="leg"><div class="dot" style="background:#854F0B"></div>午前フリー</div>
+  <div class="leg"><div class="dot" style="background:#534AB7"></div>YouTube収録</div>
+  <div class="leg"><div class="dot" style="background:#185FA5"></div>図書館（note）</div>
+  <div class="leg"><div class="dot" style="background:#3B6D11"></div>note投稿</div>
+  <div class="leg"><div class="dot" style="background:#888780"></div>バッファ／休養</div>
+  <div class="leg"><div class="dot" style="background:#A32D2D"></div>ハローワーク</div>
+  <div class="leg"><div class="dot" style="background:#993556"></div>心療内科</div>
+</div>
+<div class="grid">
+
+<div class="col">
+  <div class="dh mon">月（休養）</div>
+  <div class="db">
+    <div class="b walk">🐕 朝散歩<br>6:00〜7:30</div>
+    <div class="b rest" style="padding:12px 5px;text-align:center">休養日<br><br>図書館休館日<br>自分時間</div>
+    <div class="b walk">🐕 夕散歩<br>19:00〜</div>
+  </div>
+</div>
+
+<div class="col">
+  <div class="dh tue">火（収録）</div>
+  <div class="db">
+    <div class="b walk">🐕 朝散歩<br>6:00〜7:30</div>
+    <div class="b rec">📹 収録<br>9:00〜11:00<br><span class="sm">セッティング込み</span></div>
+    <div class="b free">ランチ・休憩<br>11:00〜12:30</div>
+    <div class="sep">13:00〜</div>
+    <div class="b lib">📚 図書館<br>note 編集<br>13:00〜18:00</div>
+    <div class="b walk">🐕 夕散歩<br>19:00〜</div>
+    <div class="b hw" style="font-size:9.5px">※月1回 ハローワーク 終日</div>
+  </div>
+</div>
+
+<div class="col">
+  <div class="dh wed">水（編集）</div>
+  <div class="db">
+    <div class="b walk">🐕 朝散歩<br>6:00〜7:30</div>
+    <div class="b free">午前フリー<br>動画編集・仕込み<br>8:00〜12:00</div>
+    <div class="sep">13:00〜</div>
+    <div class="b lib">📚 図書館<br>note 仕上げ<br>13:00〜18:00</div>
+    <div class="b walk">🐕 夕散歩<br>19:00〜</div>
+  </div>
+</div>
+
+<div class="col">
+  <div class="dh thu">木（クリニック）</div>
+  <div class="db">
+    <div class="b walk">🐕 朝散歩<br>6:00〜7:30</div>
+    <div class="b free">午前フリー<br>8:00〜10:30</div>
+    <div class="b cli">🏥 心療内科<br>10:30〜12:30</div>
+    <div class="sep">13:00〜</div>
+    <div class="b lib">📚 図書館<br>最終調整<br>13:00〜15:00</div>
+    <div class="b post">✅ note 投稿<br>15:00〜16:00</div>
+    <div class="b buf">次週仕込み<br>16:00〜18:00</div>
+    <div class="b walk">🐕 夕散歩<br>19:00〜</div>
+  </div>
+</div>
+
+<div class="col">
+  <div class="dh fri">金（軽め）</div>
+  <div class="db">
+    <div class="b walk">🐕 朝散歩<br>6:00〜7:30</div>
+    <div class="b free">読書・カード<br>8:00〜12:00</div>
+    <div class="sep">13:00〜</div>
+    <div class="b lib">📚 図書館<br>次週下書き<br>13:00〜17:00</div>
+    <div class="b walk">🐕 夕散歩<br>19:00〜</div>
+  </div>
+</div>
+
+<div class="col">
+  <div class="dh sat">土（収録②）</div>
+  <div class="db">
+    <div class="b walk">🐕 朝散歩<br>6:00〜7:30</div>
+    <div class="b rec">📹 収録（予備）<br>9:00〜11:00<br><span class="sm">火に撮れた週は休憩</span></div>
+    <div class="b free">ランチ・休憩<br>11:00〜12:30</div>
+    <div class="sep">13:00〜</div>
+    <div class="b buf">自由時間<br>カード・読書<br>13:00〜18:00</div>
+    <div class="b walk">🐕 夕散歩<br>19:00〜</div>
+  </div>
+</div>
+
+<div class="col">
+  <div class="dh sun">日（下書き）</div>
+  <div class="db">
+    <div class="b walk">🐕 朝散歩<br>6:00〜7:30</div>
+    <div class="b free">午前フリー<br>読書・リーディング<br>8:00〜12:00</div>
+    <div class="sep">13:00〜</div>
+    <div class="b lib">📚 図書館<br>note 下書き<br>13:00〜18:00</div>
+    <div class="b walk">🐕 夕散歩<br>19:00〜</div>
+  </div>
+</div>
+
+</div>
+<div class="info">
+  <b>週の投稿目標</b><br>
+  <span class="tag tag-yt">YouTube</span>火曜収録 → 週1本。体調良ければ土曜に追加で週2本。<br>
+  <span class="tag tag-n">note</span>木曜午後に投稿 → 週1本。日〜木の5日で育てる。<br><br>
+  <b>しんどい週のルール</b><br>
+  火曜収録をスキップ → 土曜に回す。それでも無理なら YouTube はお休み、note だけ投稿。
+</div>
+</div>
+</body>
+</html>

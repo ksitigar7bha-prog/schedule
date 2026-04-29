@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -44,9 +43,73 @@ body{font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP",sans
 <div class="nav" id="nav"></div>
 <script>
 const WD=["日","月","火","水","木","金","土"];
-const THEMES={月:{label:"月（緩やかスタート）",sub:"今日は午前をゆっくり使う日"},火:{label:"火（収録日）",sub:"朝に収録、午後は図書館でnote編集"},水:{label:"水（編集日）",sub:"動画編集と図書館でnoteを仕上げる"},木:{label:"木（投稿日）",sub:"今日がnote投稿日！"},金:{label:"金（軽め）",sub:"体力を温存しながら次週の準備"},土:{label:"土（収録予備）",sub:"火に撮れた週は休憩でOK"},日:{label:"日（完全オフ）",sub:"コンテンツに触れない日"}};
-const SCHEDULE={月:[{cls:"walk",icon:"🐕",title:"朝散歩",time:"6:00〜7:30"},{cls:"free",icon:"📖",title:"午前フリー",time:"8:00〜12:00",note:"読書・自分リーディング・カード"},{cls:"lib",icon:"📚",title:"図書館　note下書き",time:"13:00〜18:00"},{cls:"walk",icon:"🐕",title:"夕散歩",time:"18:00〜18:40"}],火:[{cls:"walk",icon:"🐕",title:"朝散歩",time:"6:00〜7:30"},{cls:"rec",icon:"📹",title:"YouTube収録",time:"8:30〜10:30",note:"セッティング込み。定位置を崩さない"},{cls:"free",icon:"🍱",title:"ランチ・休憩",time:"11:00〜12:30"},{cls:"lib",icon:"📚",title:"図書館　note編集",time:"13:00〜18:00"},{cls:"walk",icon:"🐕",title:"夕散歩",time:"18:00〜18:40"},{cls:"hw",icon:"📋",title:"※月1回 ハローワーク",time:"終日（認定日）",note:"この日は他の予定を入れない"}],水:[{cls:"walk",icon:"🐕",title:"朝散歩",time:"6:00〜7:30"},{cls:"free",icon:"🎬",title:"動画編集・仕込み",time:"8:00〜12:00"},{cls:"lib",icon:"📚",title:"図書館　note仕上げ",time:"13:00〜18:00"},{cls:"walk",icon:"🐕",title:"夕散歩",time:"18:00〜18:40"}],木:[{cls:"walk",icon:"🐕",title:"朝散歩",time:"6:00〜7:30"},{cls:"free",icon:"✍️",title:"午前フリー　最終確認",time:"8:00〜12:00"},{cls:"lib",icon:"📚",title:"図書館　最終調整",time:"13:00〜15:00"},{cls:"post",icon:"✅",title:"note 投稿！",time:"15:00〜16:00"},{cls:"buf",icon:"🗂️",title:"次週の仕込み",time:"16:00〜18:00"},{cls:"walk",icon:"🐕",title:"夕散歩",time:"18:00〜18:40"}],金:[{cls:"walk",icon:"🐕",title:"朝散歩",time:"6:00〜7:30"},{cls:"free",icon:"📖",title:"読書・カード",time:"8:00〜11:00"},{cls:"cli",icon:"🏥",title:"※月2回 心療内科",time:"11:00〜13:30（往復含む）"},{cls:"lib",icon:"📚",title:"図書館　次週下書き",time:"13:00〜17:00"},{cls:"walk",icon:"🐕",title:"夕散歩",time:"18:00〜18:40"}],土:[{cls:"walk",icon:"🐕",title:"朝散歩",time:"6:00〜7:30"},{cls:"rec",icon:"📹",title:"収録（予備日）",time:"8:30〜10:30",note:"火に撮れた週は休憩でOK"},{cls:"free",icon:"🍱",title:"ランチ・休憩",time:"11:00〜12:30"},{cls:"buf",icon:"🃏",title:"自由時間　カード・読書",time:"13:00〜18:00"},{cls:"walk",icon:"🐕",title:"夕散歩",time:"18:00〜18:40"}],日:[{cls:"walk",icon:"🐕",title:"朝散歩",time:"6:00〜7:30"},{cls:"rest",icon:"",title:"完全休養",time:"",note:"コンテンツに触れない日"},{cls:"walk",icon:"🐕",title:"夕散歩",time:"18:00〜18:40"}]};
-const RULES={月:"今週のnoteテーマを決めて、思いつくまま書き出す日。完成度は気にしない。",火:"収録は朝8:30スタートを守る。夜収録は原則なし。",水:"動画は「編集できる状態」にするだけでOK。完璧にしなくていい。",木:"投稿したら今週のコンテンツは完了。次週の仕込みは軽くでいい。",金:"しんどければ図書館はスキップしてOK。心療内科がある週は特に無理しない。",土:"火曜に収録できた週は今日は完全休養にしても構わない。",日:"YouTubeもnoteも見なくていい日。無意識さんを休ませる。"};
+const THEMES={
+  月:{label:"月（休養日）",sub:"図書館休館日。ゆっくり過ごす日"},
+  火:{label:"火（収録日）",sub:"朝に収録、午後は図書館でnote編集"},
+  水:{label:"水（編集日）",sub:"動画編集と図書館でnoteを仕上げる"},
+  木:{label:"木（クリニック）",sub:"午前はクリニック、午後に投稿"},
+  金:{label:"金（軽め）",sub:"体力を温存しながら次週の準備"},
+  土:{label:"土（収録予備）",sub:"火に撮れた週は休憩でOK"},
+  日:{label:"日（図書館・下書き）",sub:"週のスタート準備、note下書きの日"}
+};
+const SCHEDULE={
+  月:[
+    {cls:"walk",icon:"🐕",title:"朝散歩",time:"6:00〜7:30"},
+    {cls:"rest",icon:"",title:"休養日",time:"",note:"図書館休館日。読書・カード・自分時間"},
+    {cls:"walk",icon:"🐕",title:"夕散歩",time:"19:00〜19:40"},
+  ],
+  火:[
+    {cls:"walk",icon:"🐕",title:"朝散歩",time:"6:00〜7:30"},
+    {cls:"rec",icon:"📹",title:"YouTube収録",time:"9:00〜11:00",note:"セッティング込み。定位置を崩さない"},
+    {cls:"free",icon:"🍱",title:"ランチ・休憩",time:"11:00〜12:30"},
+    {cls:"lib",icon:"📚",title:"図書館　note編集",time:"13:00〜18:00"},
+    {cls:"walk",icon:"🐕",title:"夕散歩",time:"19:00〜19:40"},
+    {cls:"hw",icon:"📋",title:"※月1回 ハローワーク",time:"終日（認定日）",note:"この日は他の予定を入れない"},
+  ],
+  水:[
+    {cls:"walk",icon:"🐕",title:"朝散歩",time:"6:00〜7:30"},
+    {cls:"free",icon:"🎬",title:"動画編集・仕込み",time:"8:00〜12:00"},
+    {cls:"lib",icon:"📚",title:"図書館　note仕上げ",time:"13:00〜18:00"},
+    {cls:"walk",icon:"🐕",title:"夕散歩",time:"19:00〜19:40"},
+  ],
+  木:[
+    {cls:"walk",icon:"🐕",title:"朝散歩",time:"6:00〜7:30"},
+    {cls:"free",icon:"📖",title:"午前フリー",time:"8:00〜10:30"},
+    {cls:"cli",icon:"🏥",title:"心療内科",time:"10:30〜12:30（往復含む）"},
+    {cls:"lib",icon:"📚",title:"図書館　最終調整",time:"13:00〜15:00"},
+    {cls:"post",icon:"✅",title:"note 投稿！",time:"15:00〜16:00"},
+    {cls:"buf",icon:"🗂️",title:"次週の仕込み",time:"16:00〜18:00"},
+    {cls:"walk",icon:"🐕",title:"夕散歩",time:"19:00〜19:40"},
+  ],
+  金:[
+    {cls:"walk",icon:"🐕",title:"朝散歩",time:"6:00〜7:30"},
+    {cls:"free",icon:"📖",title:"読書・カード",time:"8:00〜12:00"},
+    {cls:"lib",icon:"📚",title:"図書館　次週下書き",time:"13:00〜17:00"},
+    {cls:"walk",icon:"🐕",title:"夕散歩",time:"19:00〜19:40"},
+  ],
+  土:[
+    {cls:"walk",icon:"🐕",title:"朝散歩",time:"6:00〜7:30"},
+    {cls:"rec",icon:"📹",title:"収録（予備日）",time:"9:00〜11:00",note:"火に撮れた週は休憩でOK"},
+    {cls:"free",icon:"🍱",title:"ランチ・休憩",time:"11:00〜12:30"},
+    {cls:"buf",icon:"🃏",title:"自由時間　カード・読書",time:"13:00〜18:00"},
+    {cls:"walk",icon:"🐕",title:"夕散歩",time:"19:00〜19:40"},
+  ],
+  日:[
+    {cls:"walk",icon:"🐕",title:"朝散歩",time:"6:00〜7:30"},
+    {cls:"free",icon:"📖",title:"午前フリー",time:"8:00〜12:00",note:"読書・自分リーディング・カード"},
+    {cls:"lib",icon:"📚",title:"図書館　note下書き",time:"13:00〜18:00"},
+    {cls:"walk",icon:"🐕",title:"夕散歩",time:"19:00〜19:40"},
+  ]
+};
+const RULES={
+  月:"図書館はお休み。自分のペースでゆっくり過ごす日。無理に何かしなくていい。",
+  火:"収録は朝9:00スタートを守る。夜収録は原則なし。",
+  水:"動画は「編集できる状態」にするだけでOK。完璧にしなくていい。",
+  木:"投稿したら今週のコンテンツは完了。クリニックがある週は特に無理しない。",
+  金:"今週の振り返りと次週の準備。しんどければ図書館はスキップしてOK。",
+  土:"火曜に収録できた週は今日は完全休養にしても構わない。",
+  日:"週のスタート準備。noteのテーマを決めて、思いつくまま書き出す日。"
+};
 const today=new Date();
 const todayIdx=today.getDay();
 const todayName=WD[todayIdx];
